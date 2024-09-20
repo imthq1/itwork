@@ -1,11 +1,11 @@
 package com.example.demo.service;
 
-import com.example.demo.domain.DTO.*;
 import com.example.demo.domain.User;
 import com.example.demo.domain.request.ReqLoginDTO;
-import com.example.demo.domain.request.ResCreateUserDTO;
-import com.example.demo.domain.request.ResUpdateUserDTO;
-import com.example.demo.domain.request.ResUserDTO;
+import com.example.demo.domain.response.ResCreateUserDTO;
+import com.example.demo.domain.response.ResUpdateUserDTO;
+import com.example.demo.domain.response.ResUserDTO;
+import com.example.demo.domain.response.ResultPaginationDTO;
 import com.example.demo.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

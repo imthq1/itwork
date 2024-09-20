@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.domain.request.ResLoginDTO;
+import com.example.demo.domain.response.ResLoginDTO;
 import com.example.demo.domain.request.ReqLoginDTO;
 import com.example.demo.domain.User;
 import com.example.demo.service.UserService;

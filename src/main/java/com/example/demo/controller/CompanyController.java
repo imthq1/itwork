@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.domain.Company;
-import com.example.demo.domain.DTO.ResultPaginationDTO;
+import com.example.demo.domain.response.ResultPaginationDTO;
 import com.example.demo.service.CompanyService;
 import com.example.demo.util.annontation.ApiMessage;
 import com.example.demo.util.error.IdInvalidException;

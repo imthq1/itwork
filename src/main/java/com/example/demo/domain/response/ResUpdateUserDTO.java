@@ -1,4 +1,4 @@
-package com.example.demo.domain.request;
+package com.example.demo.domain.response;
 
 import com.example.demo.util.constant.GenderEnum;
 import jakarta.persistence.EnumType;

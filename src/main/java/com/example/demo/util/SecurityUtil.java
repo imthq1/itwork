@@ -1,6 +1,6 @@
 package com.example.demo.util;
 
-import com.example.demo.domain.request.ResLoginDTO;
+import com.example.demo.domain.response.ResLoginDTO;
 import com.nimbusds.jose.util.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;

@@ -1,8 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.domain.DTO.ResultPaginationDTO;
-import com.example.demo.domain.request.ResCreateUserDTO;
-import com.example.demo.domain.request.ResUpdateUserDTO;
+import com.example.demo.domain.response.ResultPaginationDTO;
+import com.example.demo.domain.response.ResCreateUserDTO;
+import com.example.demo.domain.response.ResUpdateUserDTO;
 import com.example.demo.domain.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
