@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.domain.Company;
-import com.example.demo.domain.DTO.Meta;
 import com.example.demo.domain.DTO.ResultPaginationDTO;
 import com.example.demo.repository.CompanyRepository;
 import org.springframework.data.domain.Page;
@@ -24,7 +23,7 @@ public class CompanyService {
     public ResultPaginationDTO findAllCompanies(Specification<Company> spec, Pageable pageable) {
         Page<Company> companies = companyRepository.findAll(spec,pageable);
         ResultPaginationDTO rs=new ResultPaginationDTO();
-        Meta meta=new Meta();
+        ResultPaginationDTO.Meta meta=new ResultPaginationDTO.Meta();
 
         meta.setPage(pageable.getPageNumber()+1);
         meta.setPageSize(pageable.getPageSize());

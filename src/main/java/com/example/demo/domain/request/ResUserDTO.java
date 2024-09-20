@@ -1,4 +1,4 @@
-package com.example.demo.domain.DTO;
+package com.example.demo.domain.request;
 
 import com.example.demo.util.constant.GenderEnum;
 import lombok.AllArgsConstructor;

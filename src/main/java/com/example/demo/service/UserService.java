@@ -2,6 +2,10 @@ package com.example.demo.service;
 
 import com.example.demo.domain.DTO.*;
 import com.example.demo.domain.User;
+import com.example.demo.domain.request.ReqLoginDTO;
+import com.example.demo.domain.request.ResCreateUserDTO;
+import com.example.demo.domain.request.ResUpdateUserDTO;
+import com.example.demo.domain.request.ResUserDTO;
 import com.example.demo.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +34,8 @@ public class UserService {
     , Pageable pageable) {
         Page<User> pageUsers = this.userRepository.findAll(spec,pageable);
         ResultPaginationDTO rs=new ResultPaginationDTO();
-        Meta mt=new Meta();
+        ResultPaginationDTO.Meta mt=new ResultPaginationDTO.Meta();
+
 
         //FE gui len
         mt.setPage(pageable.getPageNumber()+1);
@@ -57,7 +62,7 @@ public class UserService {
         return rs;
     }
 
-    public User DTOtoUser(LoginUserDTO userDTO) {
+    public User DTOtoUser(ReqLoginDTO userDTO) {
         User user = new User();
         user.setEmail(userDTO.getUsername());
         user.setPassword(userDTO.getPassword());
@@ -66,8 +71,8 @@ public class UserService {
     public User GetUserByUsername(String username) {
         return this.userRepository.getUserByEmail(username);
     }
-    public CreateUserDTO createUserDTO(User user) {
-        CreateUserDTO userDTO = new CreateUserDTO();
+    public ResCreateUserDTO createUserDTO(User user) {
+        ResCreateUserDTO userDTO = new ResCreateUserDTO();
         userDTO.setId(user.getId());
         userDTO.setName(user.getName());
         userDTO.setEmail(user.getEmail());
@@ -77,8 +82,8 @@ public class UserService {
         userDTO.setCreatedAt(user.getCreatedAt());
         return userDTO;
     }
-    public UpdateUserDTO updateUserDTO(User user) {
-        UpdateUserDTO userDTO = new UpdateUserDTO();
+    public ResUpdateUserDTO updateUserDTO(User user) {
+        ResUpdateUserDTO userDTO = new ResUpdateUserDTO();
         userDTO.setId(user.getId());
         userDTO.setName(user.getName());
         userDTO.setAddress(user.getAddress());
@@ -87,6 +92,18 @@ public class UserService {
         userDTO.setUpdatedAt(user.getUpdatedAt());
         return userDTO;
     }
-
+    public void updateUserToken(String token,String email)
+    {
+        User currentUser = this.GetUserByUsername(email);
+        if(currentUser!=null)
+        {
+            currentUser.setRefreshToken(token);
+            this.userRepository.save(currentUser);
+        }
+    }
+    public User getUserByRefreshTokenAndEmail(String refreshToken,String email)
+    {
+        return this.userRepository.findByRefreshTokenAndEmail(refreshToken, email);
+    }
 
 }

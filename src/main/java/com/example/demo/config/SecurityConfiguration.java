@@ -49,7 +49,7 @@ public class SecurityConfiguration  {
                 csrf(c -> c.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/", "/api/v1/login").permitAll()
+                        .requestMatchers("/", "/api/v1/auth/login","/api/v1/auth/refresh").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(f -> f.disable())
@@ -82,7 +82,8 @@ public class SecurityConfiguration  {
         JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new
                 JwtGrantedAuthoritiesConverter();
         grantedAuthoritiesConverter.setAuthorityPrefix("");
-        grantedAuthoritiesConverter.setAuthoritiesClaimName("imthag");
+        //set quyen han co ten la permission vao context
+        grantedAuthoritiesConverter.setAuthoritiesClaimName("permission");
 
         JwtAuthenticationConverter jwtAuthenticationConverter = new
                 JwtAuthenticationConverter();

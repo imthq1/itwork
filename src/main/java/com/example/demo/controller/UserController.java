@@ -1,8 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.domain.DTO.ResultPaginationDTO;
-import com.example.demo.domain.DTO.CreateUserDTO;
-import com.example.demo.domain.DTO.UpdateUserDTO;
+import com.example.demo.domain.request.ResCreateUserDTO;
+import com.example.demo.domain.request.ResUpdateUserDTO;
 import com.example.demo.domain.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
@@ -32,14 +32,14 @@ public class UserController {
 
     @ApiMessage("Create a new user")
     @PostMapping("/users")
-    public ResponseEntity<CreateUserDTO> create(@Valid  @RequestBody User user) throws Exception{
+    public ResponseEntity<ResCreateUserDTO> create(@Valid  @RequestBody User user) throws Exception{
         if(this.userRepository.existsByEmail(user.getEmail())){
             throw new IdInvalidException("Email already exists");
         }
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);
         this.userService.save(user);
-        CreateUserDTO userDTO=this.userService.createUserDTO(user);
+        ResCreateUserDTO userDTO=this.userService.createUserDTO(user);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }
@@ -58,7 +58,7 @@ public class UserController {
 
     @GetMapping("/users/{id}")
     @ApiMessage("fetch user by id")
-    public ResponseEntity<CreateUserDTO> get(@PathVariable("id") long id) throws IdInvalidException {
+    public ResponseEntity<ResCreateUserDTO> get(@PathVariable("id") long id) throws IdInvalidException {
         User user = userService.findById(id);
         if (user == null) {
             throw new IdInvalidException("User not found");
@@ -77,26 +77,26 @@ public class UserController {
     }
     @ApiMessage("Update a user")
     @PutMapping("/users")
-    public ResponseEntity<UpdateUserDTO> update(@RequestBody User user) throws Exception{
+    public ResponseEntity<ResUpdateUserDTO> update(@RequestBody User user) throws Exception{
         User user1=this.userService.findById(user.getId());
         if(user1==null){
             throw new IdInvalidException("Id  already exists");
         }
-        user1.setId(user.getId());
         user1.setName(user.getName());
         user1.setGender(user.getGender());
         user1.setAge(user.getAge());
         user1.setAddress(user.getAddress());
 
-        this.userService.save(user);
-        UpdateUserDTO up=new UpdateUserDTO();
-        up.setId(user.getId());
-        up.setName(user.getName());
-        up.setGender(user.getGender());
-        up.setAge(user.getAge());
-        up.setAddress(user.getAddress());
-        up.setUpdatedAt(user.getUpdatedAt());
+        this.userService.save(user1);
+        ResUpdateUserDTO up=new ResUpdateUserDTO();
+        up.setId(user1.getId());
+        up.setName(user1.getName());
+        up.setGender(user1.getGender());
+        up.setAge(user1.getAge());
+        up.setAddress(user1.getAddress());
+        up.setUpdatedAt(user1.getUpdatedAt());
 
         return ResponseEntity.ok(up);
     }
+
 }

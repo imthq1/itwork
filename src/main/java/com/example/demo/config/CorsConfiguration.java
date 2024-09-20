@@ -13,10 +13,15 @@ public class CorsConfiguration {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         org.springframework.web.cors.CorsConfiguration configuration = new org.springframework.web.cors.CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        //cho phep cac url nao co the ket noi toi backend
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","http://localhost:4173","http://localhost:5173"));
+        //cac method duoc ket noi
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        //cac phan header duoc phep gui len
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type","Accept","x-no-retry"));
+//        gui kem cookie hay khong
         configuration.setAllowCredentials(true);
+        //thoi gian pre-flight request co the cache
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
         source.registerCorsConfiguration("/**", configuration);

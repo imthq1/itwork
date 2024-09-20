@@ -1,8 +1,8 @@
-package com.example.demo.domain.DTO;
+package com.example.demo.domain.request;
 
 import jakarta.validation.constraints.NotBlank;
 
-public class LoginUserDTO {
+public class ReqLoginDTO {
     @NotBlank(message = "username không được để trống")
     private String username;
     @NotBlank(message = "password không được để trống")

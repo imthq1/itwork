@@ -37,12 +37,13 @@ public class CompanyController {
     }
 
     @DeleteMapping("/companies/{id}")
-    public ResponseEntity<Company> deleteCompany(@Valid @PathVariable long id) throws IdInvalidException {
+    public ResponseEntity<Void> deleteCompany(@Valid @PathVariable long id) throws IdInvalidException {
         Company company=this.companyService.findById(id);
         if(company==null) {
             throw new IdInvalidException("Company not found");
         }
-        return ResponseEntity.ok().body(this.companyService.UpdateCompany(company));
+        this.companyService.DeleteById(id);
+        return ResponseEntity.ok().build();
     }
 
 

@@ -1,8 +1,9 @@
-package com.example.demo.domain.DTO;
+package com.example.demo.domain.request;
 
 import com.example.demo.util.constant.GenderEnum;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.PreUpdate;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,18 +11,20 @@ import java.time.Instant;
 
 @Getter
 @Setter
-public class CreateUserDTO {
+public class ResUpdateUserDTO {
     private int id;
     private String name;
-    private String email;
     private int age;
 
     @Enumerated(EnumType.STRING)
     private GenderEnum gender;
 
     private String address;
-    private Instant createdAt;
 
+    private Instant updatedAt;
 
-
+    @PreUpdate
+    public void BeforeUpdate() {
+        this.updatedAt = Instant.now();
+    }
 }

@@ -1,6 +1,7 @@
-package com.example.demo.service;
+package com.example.demo.config;
 
 import com.example.demo.domain.User;
+import com.example.demo.service.UserService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
