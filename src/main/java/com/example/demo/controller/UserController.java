@@ -1,10 +1,12 @@
 package com.example.demo.controller;
 
+import com.example.demo.domain.Company;
 import com.example.demo.domain.response.ResultPaginationDTO;
 import com.example.demo.domain.response.ResCreateUserDTO;
 import com.example.demo.domain.response.ResUpdateUserDTO;
 import com.example.demo.domain.User;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.service.CompanyService;
 import com.example.demo.service.UserService;
 import com.example.demo.util.annontation.ApiMessage;
 import com.example.demo.util.error.IdInvalidException;
@@ -23,11 +25,12 @@ public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-
-    public UserController(UserService userService, PasswordEncoder passwordEncoder, UserRepository userRepository) {
+    private final CompanyService companyService;
+    public UserController(UserService userService, PasswordEncoder passwordEncoder, UserRepository userRepository, CompanyService companyService) {
         this.userRepository=userRepository;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.companyService = companyService;
     }
 
     @ApiMessage("Create a new user")
@@ -38,10 +41,9 @@ public class UserController {
         }
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);
-        this.userService.save(user);
-        ResCreateUserDTO userDTO=this.userService.createUserDTO(user);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
+        User user1=this.userService.handleCreateUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.createUserDTO(user1));
     }
 
     @DeleteMapping("/users/{id}")
@@ -60,9 +62,11 @@ public class UserController {
     @ApiMessage("fetch user by id")
     public ResponseEntity<ResCreateUserDTO> get(@PathVariable("id") long id) throws IdInvalidException {
         User user = userService.findById(id);
-        if (user == null) {
+        if(user==null)
+        {
             throw new IdInvalidException("User not found");
         }
+
         return ResponseEntity.ok(this.userService.createUserDTO(user));
     }
 
@@ -73,30 +77,18 @@ public class UserController {
             Pageable pageable
             )
     {
+
         return ResponseEntity.ok(this.userService.findAll(spec,pageable));
     }
     @ApiMessage("Update a user")
     @PutMapping("/users")
     public ResponseEntity<ResUpdateUserDTO> update(@RequestBody User user) throws Exception{
-        User user1=this.userService.findById(user.getId());
+        User user1=this.userService.updateUserDTO(user);
         if(user1==null){
             throw new IdInvalidException("Id  already exists");
         }
-        user1.setName(user.getName());
-        user1.setGender(user.getGender());
-        user1.setAge(user.getAge());
-        user1.setAddress(user.getAddress());
 
-        this.userService.save(user1);
-        ResUpdateUserDTO up=new ResUpdateUserDTO();
-        up.setId(user1.getId());
-        up.setName(user1.getName());
-        up.setGender(user1.getGender());
-        up.setAge(user1.getAge());
-        up.setAddress(user1.getAddress());
-        up.setUpdatedAt(user1.getUpdatedAt());
-
-        return ResponseEntity.ok(up);
+        return ResponseEntity.ok(this.userService.convertUserToDTO(user1));
     }
 
 }

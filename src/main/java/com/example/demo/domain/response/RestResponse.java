@@ -1,4 +1,4 @@
-package com.example.demo.domain;
+package com.example.demo.domain.response;
 
 public class RestResponse<T> {
     private int statusCode;

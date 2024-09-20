@@ -2,12 +2,14 @@ package com.example.demo.domain;
 
 import com.example.demo.util.SecurityUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Getter
@@ -28,6 +30,7 @@ public class Company {
 
     private String logo;
 
+
 //    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a",timezone = "GTM+7")
     private Instant createdAt;
 
@@ -37,7 +40,9 @@ public class Company {
 
     private String updatedBy;
 
-
+    @OneToMany(mappedBy = "company",fetch = FetchType.LAZY)
+    @JsonIgnore
+    List<User> users;
 
     @PrePersist
     public void BeforeCreate(){

@@ -1,19 +1,26 @@
 package com.example.demo.service;
 
 import com.example.demo.domain.Company;
+import com.example.demo.domain.User;
 import com.example.demo.domain.response.ResultPaginationDTO;
 import com.example.demo.repository.CompanyRepository;
+import com.example.demo.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
+
 @Service
 public class CompanyService {
     private final CompanyRepository companyRepository;
-
-    public CompanyService(CompanyRepository companyRepository) {
+    private final UserRepository userRepository;
+    public CompanyService(CompanyRepository companyRepository, UserRepository userRepository) {
         this.companyRepository = companyRepository;
+        this.userRepository = userRepository;
     }
     public Company CreateCompany(Company company) {
         return companyRepository.save(company);
@@ -33,8 +40,14 @@ public class CompanyService {
         rs.setResult(companies.getContent());
         return rs;
     }
-    public Company DeleteById(long id) {
-        return this.companyRepository.deleteById(id);
+    public void DeleteById(long id) {
+        Optional<Company> company = Optional.ofNullable(companyRepository.findById(id));
+        if (company.isPresent()) {
+            Company company1 = company.get();
+            List<User> users=this.userRepository.findByCompany(company1);
+            this.userRepository.deleteAll(users);
+        }
+
     }
     public Company UpdateCompany(Company company) {
         Company oldCompany =this.companyRepository.findById(company.getId());

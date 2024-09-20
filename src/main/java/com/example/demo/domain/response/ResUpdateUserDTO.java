@@ -1,5 +1,6 @@
 package com.example.demo.domain.response;
 
+import com.example.demo.domain.Company;
 import com.example.demo.util.constant.GenderEnum;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -15,7 +16,15 @@ public class ResUpdateUserDTO {
     private int id;
     private String name;
     private int age;
+    private Company company;
 
+    @Getter
+    @Setter
+    public static class Company{
+        private long id;
+        private String name;
+
+    }
     @Enumerated(EnumType.STRING)
     private GenderEnum gender;
 

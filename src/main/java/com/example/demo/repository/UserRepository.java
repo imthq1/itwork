@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import com.example.demo.domain.Company;
 import com.example.demo.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -15,4 +16,5 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
      boolean existsByEmail(String email);
      User findById(long id);
      User findByRefreshTokenAndEmail(String refreshToken, String email);
+     List<User> findByCompany(Company company);
 }

@@ -1,5 +1,6 @@
 package com.example.demo.domain.response;
 
+import com.example.demo.domain.Company;
 import com.example.demo.util.constant.GenderEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,4 +22,15 @@ public class ResUserDTO {
     private int age;
     private Instant updateAt;
     private Instant createAt;
+    private Company company;
+
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Company{
+        private long id;
+        private String name;
+    }
 }

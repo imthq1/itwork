@@ -49,7 +49,7 @@ public class SecurityConfiguration  {
                 csrf(c -> c.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/", "/api/v1/auth/login","/api/v1/auth/refresh").permitAll()
+                        .requestMatchers("/", "/api/v1/auth/login","/api/v1/auth/refresh","/api/v1/users").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(f -> f.disable())
