@@ -13,7 +13,11 @@ import java.time.Instant;
 @Getter
 @Setter
 public class ResUpdateUserDTO {
+<<<<<<< HEAD
     private int id;
+=======
+    private long id;
+>>>>>>> master
     private String name;
     private int age;
     private Company company;

@@ -1,7 +1,6 @@
 package com.example.demo.domain;
 
 import com.example.demo.util.SecurityUtil;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -12,45 +11,27 @@ import java.time.Instant;
 import java.util.List;
 
 @Entity
+@Table(name = "skills")
 @Getter
 @Setter
-@Table(name = "companies")
-public class Company {
+public class Skill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @NotBlank(message = "name không được để trống")
+    @NotBlank(message = "Không được để trống")
     private String name;
 
-    @Column(columnDefinition = "MEDIUMTEXT")
-    private String description;
-
-    private String address;
-
-    private String logo;
-
-
-//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a",timezone = "GTM+7")
     private Instant createdAt;
-
     private Instant updatedAt;
-
     private String createdBy;
-
     private String updatedBy;
 
-    @OneToMany(mappedBy = "company",fetch = FetchType.LAZY)
-    @JsonIgnore
-    List<User> users;
 
-<<<<<<< HEAD
-=======
-    @OneToMany(mappedBy = "company",fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY,mappedBy = "skills")
     @JsonIgnore
-    List<Job> jobs;
+    private List<Job> jobs;
 
->>>>>>> master
     @PrePersist
     public void BeforeCreate(){
         this.createdBy= SecurityUtil.getCurrentUserLogin().isPresent()== true
@@ -64,5 +45,6 @@ public class Company {
         this.updatedBy= SecurityUtil.getCurrentUserLogin().isPresent()==true
                 ? SecurityUtil.getCurrentUserLogin().get():"";
     }
+
 
 }

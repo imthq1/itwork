@@ -1,56 +1,46 @@
 package com.example.demo.domain;
 
 import com.example.demo.util.SecurityUtil;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.demo.util.constant.StatusEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
-import java.util.List;
+
 
 @Entity
+@Table(name = "resumes")
 @Getter
 @Setter
-@Table(name = "companies")
-public class Company {
+public class Resume {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @NotBlank(message = "name không được để trống")
-    private String name;
+    @NotBlank(message = "email khonbg duoc de trong")
+    private String email;
 
-    @Column(columnDefinition = "MEDIUMTEXT")
-    private String description;
+    @NotBlank(message = "url khon duoc de trong (upload cv chua thanh cong)")
+    private String url;
 
-    private String address;
-
-    private String logo;
-
-
-//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a",timezone = "GTM+7")
+    @Enumerated(EnumType.STRING)
+    private StatusEnum status;
     private Instant createdAt;
-
     private Instant updatedAt;
-
     private String createdBy;
-
     private String updatedBy;
 
-    @OneToMany(mappedBy = "company",fetch = FetchType.LAZY)
-    @JsonIgnore
-    List<User> users;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-<<<<<<< HEAD
-=======
-    @OneToMany(mappedBy = "company",fetch = FetchType.LAZY)
-    @JsonIgnore
-    List<Job> jobs;
+    @ManyToOne
+    @JoinColumn(name = "job_id")
+    private Job job;
 
->>>>>>> master
+
     @PrePersist
     public void BeforeCreate(){
         this.createdBy= SecurityUtil.getCurrentUserLogin().isPresent()== true
@@ -64,5 +54,4 @@ public class Company {
         this.updatedBy= SecurityUtil.getCurrentUserLogin().isPresent()==true
                 ? SecurityUtil.getCurrentUserLogin().get():"";
     }
-
 }

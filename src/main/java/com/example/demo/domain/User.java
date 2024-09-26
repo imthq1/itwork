@@ -2,6 +2,10 @@ package com.example.demo.domain;
 
 import com.example.demo.util.SecurityUtil;
 import com.example.demo.util.constant.GenderEnum;
+<<<<<<< HEAD
+=======
+import com.fasterxml.jackson.annotation.JsonIgnore;
+>>>>>>> master
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -9,6 +13,10 @@ import lombok.Setter;
 
 import java.time.Instant;
 import java.util.Date;
+<<<<<<< HEAD
+=======
+import java.util.List;
+>>>>>>> master
 
 @Getter
 @Setter
@@ -17,7 +25,11 @@ import java.util.Date;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+<<<<<<< HEAD
     private int id;
+=======
+    private long id;
+>>>>>>> master
 
 
     private String name;
@@ -44,7 +56,16 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
+<<<<<<< HEAD
     
+=======
+
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Resume> resumes;
+
+
+>>>>>>> master
 
     @PrePersist
     public void BeforeCreate(){

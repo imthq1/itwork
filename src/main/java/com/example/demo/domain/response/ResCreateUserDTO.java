@@ -14,7 +14,11 @@ import java.time.Instant;
 @Getter
 @Setter
 public class ResCreateUserDTO {
+<<<<<<< HEAD
     private int id;
+=======
+    private long id;
+>>>>>>> master
     private String name;
     private String email;
     private int age;

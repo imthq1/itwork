@@ -13,4 +13,8 @@ public interface CompanyRepository extends JpaRepository<Company, Long>, JpaSpec
     List<Company> findAll();
     Company deleteById(long id);
     Company findById(long id);
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 }
