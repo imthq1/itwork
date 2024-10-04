@@ -56,15 +56,13 @@ public class JobController {
     }
     @PutMapping("/jobs")
     @ApiMessage("Update a job")
-    public ResponseEntity<ResUpdateJobDTO> updateJob(@RequestBody Job job) throws IdInvalidException {
-        Optional<Job> job1 = Optional.ofNullable(this.jobService.findById(job.getId()));
-        if(!job1.isPresent())
+    public ResponseEntity<ResUpdateJobDTO> updateJob(@Valid @RequestBody Job job) throws IdInvalidException {
+        Optional<Job> jobDB = Optional.ofNullable(this.jobService.findById(job.getId()));
+        if(!jobDB.isPresent())
         {
             throw new IdInvalidException("Job not found");
         }
 
-
-
-        return ResponseEntity.ok().body(this.jobService.update(job));
+        return ResponseEntity.ok().body(this.jobService.update(job,jobDB.get()));
     }
 }

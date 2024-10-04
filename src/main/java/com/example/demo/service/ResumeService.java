@@ -11,6 +11,13 @@ import com.example.demo.domain.response.resumes.ResUpdateResumeDTO;
 import com.example.demo.repository.JobRepository;
 import com.example.demo.repository.ResumeRepository;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.util.SecurityUtil;
+import com.turkraft.springfilter.builder.FilterBuilder;
+import com.turkraft.springfilter.converter.FilterSpecification;
+import com.turkraft.springfilter.converter.FilterSpecificationConverter;
+import com.turkraft.springfilter.parser.FilterParser;
+import com.turkraft.springfilter.parser.node.FilterNode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -26,10 +33,20 @@ public class ResumeService {
     private final ResumeRepository resumeRepository;
     private final UserRepository userRepository;
     private final JobRepository jobRepository;
-    public ResumeService(ResumeRepository resumeRepository, UserRepository userRepository,JobRepository jobRepository) {
+    private final SecurityUtil securityUtil;
+    @Autowired
+    private FilterBuilder fb;
+
+    @Autowired
+    private FilterParser filterParser;
+
+    @Autowired
+    private FilterSpecificationConverter specificationConverter;
+    public ResumeService(ResumeRepository resumeRepository, UserRepository userRepository,JobRepository jobRepository, SecurityUtil securityUtil) {
         this.resumeRepository = resumeRepository;
         this.userRepository = userRepository;
         this.jobRepository = jobRepository;
+        this.securityUtil = securityUtil;
     }
     public ResCreatedDTO handleCreateResume(Resume resume)  {
         ResCreatedDTO resCreatedDTO = new ResCreatedDTO();
@@ -70,8 +87,9 @@ public class ResumeService {
     public void deleteResume(long id) {
         this.resumeRepository.deleteById(id);
     }
+
     public ResFetchResumeDTO getRsume(Resume resume) {
-        ResFetchResumeDTO res=new ResFetchResumeDTO();
+        ResFetchResumeDTO res = new ResFetchResumeDTO();
         res.setId(resume.getId());
         res.setEmail(resume.getEmail());
         res.setUrl(resume.getUrl());
@@ -81,12 +99,26 @@ public class ResumeService {
         res.setUpdatedAt(resume.getUpdatedAt());
         res.setUpdatedBy(resume.getUpdatedBy());
 
-        ResFetchResumeDTO.UserResume user=new ResFetchResumeDTO.UserResume(resume.getUser().getId(),resume.getUser().getName());
-        res.setUser(user);
-        ResFetchResumeDTO.JobResume job=new ResFetchResumeDTO.JobResume(resume.getJob().getId(),resume.getJob().getName());
-        res.setJob(job);
+        // Kiểm tra Job và Company
+        if (resume.getJob() != null) {
+            res.setCompanyName(resume.getJob().getCompany() != null ? resume.getJob().getCompany().getName() : null);
+        }
+
+        // Kiểm tra User
+        if (resume.getUser() != null) {
+            ResFetchResumeDTO.UserResume user = new ResFetchResumeDTO.UserResume(resume.getUser().getId(), resume.getUser().getName());
+            res.setUser(user);
+        }
+
+        // Kiểm tra Job
+        if (resume.getJob() != null) {
+            ResFetchResumeDTO.JobResume job = new ResFetchResumeDTO.JobResume(resume.getJob().getId(), resume.getJob().getName());
+            res.setJob(job);
+        }
+
         return res;
     }
+
     public ResultPaginationDTO getAllResumes(Specification<Resume> specification, Pageable pageable)
     {
         Page<Resume> page=this.resumeRepository.findAll(specification,pageable);
@@ -106,6 +138,27 @@ public class ResumeService {
                 .collect(Collectors.toList());
         res.setResult(listResume);
 
+        return res;
+    }
+
+    public ResultPaginationDTO fetchResumeByUser(Pageable pageable)
+    {
+        ResultPaginationDTO res=new ResultPaginationDTO();
+        ResultPaginationDTO.Meta meta=new ResultPaginationDTO.Meta();
+
+        String email=SecurityUtil.getCurrentUserLogin().isPresent()==true?SecurityUtil.getCurrentUserLogin().get():"";
+        FilterNode node=filterParser.parse("email='"+email+"'");
+        FilterSpecification<Resume> spec=specificationConverter.convert(node);
+        Page<Resume> page=this.resumeRepository.findAll(spec,pageable);
+
+        meta.setPage(pageable.getPageNumber()+1);
+        meta.setPageSize(pageable.getPageSize());
+
+        meta.setPages(page.getTotalPages());
+        meta.setTotal(page.getTotalElements());
+
+        res.setMeta(meta);
+        res.setResult(page.getContent());
         return res;
     }
 }

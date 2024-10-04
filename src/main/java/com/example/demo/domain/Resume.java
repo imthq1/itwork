@@ -22,7 +22,7 @@ public class Resume {
     @NotBlank(message = "email khonbg duoc de trong")
     private String email;
 
-    @NotBlank(message = "url khon duoc de trong (upload cv chua thanh cong)")
+    @NotBlank(message = "url khong duoc de trong (upload cv chua thanh cong)")
     private String url;
 
     @Enumerated(EnumType.STRING)

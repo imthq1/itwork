@@ -40,8 +40,13 @@ public class SecurityUtil {
         this.jwtEncoder = jwtEncoder;
     }
 
-    public String createAccessToken(String email,ResLoginDTO.UserLogin dto)
+    public String createAccessToken(String email,ResLoginDTO dto)
 {
+    ResLoginDTO.UserInsideToken userInsideToken=new ResLoginDTO.UserInsideToken();
+    userInsideToken.setId(dto.getUserLogin().getId());
+    userInsideToken.setEmail(dto.getUserLogin().getEmail());
+    userInsideToken.setName(dto.getUserLogin().getName());
+
     Instant now = Instant.now();
     Instant validity = now.plus(this.accessTokenExpiration, ChronoUnit.SECONDS);
 
@@ -55,7 +60,7 @@ public class SecurityUtil {
             .issuedAt(now)
             .expiresAt(validity)
             .subject(email)
-            .claim("user", dto)
+            .claim("user", userInsideToken)
             .claim("permission", listAuthority)
             .build();
     //header
@@ -68,13 +73,18 @@ public class SecurityUtil {
     {
         Instant now = Instant.now();
         Instant validity = now.plus(this.refreshTokenExpiration, ChronoUnit.SECONDS);
+
+        ResLoginDTO.UserInsideToken userInsideToken=new ResLoginDTO.UserInsideToken();
+        userInsideToken.setId(dto.getUserLogin().getId());
+        userInsideToken.setEmail(dto.getUserLogin().getEmail());
+        userInsideToken.setName(dto.getUserLogin().getName());
 //Body
 // @formatter:off
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuedAt(now)
                 .expiresAt(validity)
                 .subject(email)
-                .claim("user", dto.getUserLogin())
+                .claim("user", userInsideToken)
                 .build();
         //header
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITH).build();

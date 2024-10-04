@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestControllerAdvice
 public class GlobalException {
-    @ExceptionHandler(value={
+    @ExceptionHandler(value = {
             UsernameNotFoundException.class,
             BadRequestException.class,
             IdInvalidException.class,
@@ -35,12 +35,12 @@ public class GlobalException {
         BindingResult bindingResult = ex.getBindingResult();
         final List<FieldError> fieldErrors = bindingResult.getFieldErrors();
 
-        RestResponse<Object> res=new RestResponse<Object>();
+        RestResponse<Object> res = new RestResponse<Object>();
         res.setStatusCode(HttpStatus.BAD_REQUEST.value());
         res.setError(ex.getBody().getDetail());
 
-        List<String> errors=new ArrayList<>();
-        for(FieldError fieldError:fieldErrors){
+        List<String> errors = new ArrayList<>();
+        for (FieldError fieldError : fieldErrors) {
             errors.add(fieldError.getDefaultMessage());
         }
 //        List<String> Errrors=new ArrayList<String>();
@@ -50,21 +50,16 @@ public class GlobalException {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
 
     }
+
     //Exception URL
     @ExceptionHandler(value = {
             NoResourceFoundException.class,
     })
     public ResponseEntity<RestResponse<Object>> noResourceFoundException(Exception ex) {
-        RestResponse<Object> res=new RestResponse<Object>();
+        RestResponse<Object> res = new RestResponse<Object>();
         res.setStatusCode(HttpStatus.NOT_FOUND.value());
         res.setError(ex.getMessage());
-<<<<<<< HEAD
         res.setMessage("404 Not Foun. URL may not exist...");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
-    }
-
-=======
-        res.setMessage("404 Not Found. URL may not exist...");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
     }
     @ExceptionHandler(value={
@@ -77,5 +72,19 @@ public class GlobalException {
         restResponse.setMessage("Exception upload file...");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(restResponse);
     }
->>>>>>> master
+    @ExceptionHandler(value={
+            PermissionException.class
+    })
+    public ResponseEntity<RestResponse<Object>> handlePermissionException(Exception ex) {
+        RestResponse<Object> restResponse=new RestResponse<>();
+        restResponse.setStatusCode(HttpStatus.FORBIDDEN.value());
+        restResponse.setError(ex.getMessage());
+        restResponse.setMessage("Forbidden");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(restResponse);
+    }
 }
+
+
+
+
+

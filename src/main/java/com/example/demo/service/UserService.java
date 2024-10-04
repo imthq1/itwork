@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.domain.Company;
+import com.example.demo.domain.Role;
 import com.example.demo.domain.User;
 import com.example.demo.domain.request.ReqLoginDTO;
 import com.example.demo.domain.response.ResCreateUserDTO;
@@ -24,9 +25,11 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
     private final CompanyService companyService;
-    public UserService(UserRepository userRepository, CompanyService companyService) {
+    private final RoleService roleService;
+    public UserService(UserRepository userRepository, CompanyService companyService, RoleService roleService) {
         this.userRepository = userRepository;
         this.companyService = companyService;
+        this.roleService = roleService;
     }
     public User save(User user) {
         return this.userRepository.save(user);
@@ -57,22 +60,8 @@ public class UserService {
 //        ResUserDTO.Company company=new ResUserDTO.Company();
 //        company.setId();
 
-        List<ResUserDTO> listUser=pageUsers.getContent()
-                .stream().map(item->new ResUserDTO(
-                        item.getId(),
-                        item.getEmail(),
-                                item.getName(),
-                                item.getGender(),
-                                item.getAddress(),
-                                item.getAge(),
-                                item.getUpdatedAt(),
-                                item.getCreatedAt(),
-                        new ResUserDTO.Company(
-                                item.getCompany()!=null ? item.getCompany().getId():0,
-                                item.getCompany() !=null ? item.getCompany().getName():null
-                        )
-                        )
-                )
+        List<ResCreateUserDTO> listUser=pageUsers.getContent()
+                .stream().map(item->this.createUserDTO(item))
                 .collect(Collectors.toList());
 
         rs.setResult(listUser);
@@ -91,7 +80,6 @@ public class UserService {
 
     public ResCreateUserDTO createUserDTO(User user) {
         ResCreateUserDTO userDTO = new ResCreateUserDTO();
-        ResCreateUserDTO.Company company = new ResCreateUserDTO.Company();
 
         userDTO.setId(user.getId());
         userDTO.setName(user.getName());
@@ -102,9 +90,14 @@ public class UserService {
         userDTO.setCreatedAt(user.getCreatedAt());
 
         if(user.getCompany() != null) {
-            company.setId(user.getCompany().getId());
-            company.setName(user.getCompany().getName());
+            ResCreateUserDTO.Company company = new ResCreateUserDTO.Company(user.getCompany().getId(),
+                    user.getCompany().getName());
             userDTO.setCompany(company);
+        }
+        if(user.getRole() != null) {
+            ResCreateUserDTO.Role role=new ResCreateUserDTO.Role(user.getRole().getId(),
+                    user.getRole().getName());
+        userDTO.setRole(role);
         }
         return userDTO;
     }
@@ -113,6 +106,10 @@ public class UserService {
             // Lấy ID của công ty từ đối tượng Company và truyền vào phương thức findById
             Optional<Company> companyOptional = Optional.ofNullable(this.companyService.findById(user.getCompany().getId()));
             user.setCompany(companyOptional.isPresent() ? companyOptional.get() :null);
+        }
+        if(user.getRole()!=null) {
+            Role r=this.roleService.findById(user.getRole().getId());
+            user.setRole(r!=null?r:null);
         }
         return this.userRepository.save(user);
     }
@@ -130,6 +127,10 @@ public class UserService {
             currentUser.setCompany(companyOptional.isPresent() ? companyOptional.get() :null);
         }
 
+        if(user.getRole()!=null) {
+            Role r=this.roleService.findById(user.getRole().getId());
+            currentUser.setRole(r!=null?r:null);
+        }
         currentUser=this.userRepository.save(currentUser);
         return currentUser;
     }
@@ -163,5 +164,6 @@ public class UserService {
 
         return userDTO;
     }
+
 
 }

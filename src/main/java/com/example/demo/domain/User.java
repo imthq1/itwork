@@ -2,10 +2,9 @@ package com.example.demo.domain;
 
 import com.example.demo.util.SecurityUtil;
 import com.example.demo.util.constant.GenderEnum;
-<<<<<<< HEAD
-=======
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
->>>>>>> master
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -13,10 +12,9 @@ import lombok.Setter;
 
 import java.time.Instant;
 import java.util.Date;
-<<<<<<< HEAD
-=======
+
+
 import java.util.List;
->>>>>>> master
 
 @Getter
 @Setter
@@ -25,13 +23,7 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-<<<<<<< HEAD
-    private int id;
-=======
     private long id;
->>>>>>> master
-
-
     private String name;
     @NotBlank(message = "Email khong duoc de trong")
     private String email;
@@ -56,29 +48,26 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
-<<<<<<< HEAD
-    
-=======
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Resume> resumes;
 
-
->>>>>>> master
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     @PrePersist
-    public void BeforeCreate(){
-        this.createdBy= SecurityUtil.getCurrentUserLogin().isPresent()== true
+    public void BeforeCreate() {
+        this.createdBy = SecurityUtil.getCurrentUserLogin().isPresent() == true
                 ? SecurityUtil.getCurrentUserLogin().get() : "";
         this.createdAt = Instant.now();
     }
 
     @PreUpdate
-    public void BeforeUpdate(){
+    public void BeforeUpdate() {
         this.updatedAt = Instant.now();
-        this.updatedBy= SecurityUtil.getCurrentUserLogin().isPresent()==true
-                ? SecurityUtil.getCurrentUserLogin().get():"";
+        this.updatedBy = SecurityUtil.getCurrentUserLogin().isPresent() == true
+                ? SecurityUtil.getCurrentUserLogin().get() : "";
     }
-
 }

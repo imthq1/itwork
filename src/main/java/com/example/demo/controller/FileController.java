@@ -38,7 +38,7 @@ public class FileController {
     @PostMapping("/files")
     @ApiMessage("Upload single file")
     public ResponseEntity<ResUploadFileDTO> uploadFile(@RequestParam(name = "file", required = false) MultipartFile file,
-                                                       @RequestParam("folder") String folder) throws URISyntaxException, IOException, StorageException {
+                                                       @RequestParam(name = "folder") String folder) throws URISyntaxException, IOException, StorageException {
 
         if (file == null || file.isEmpty()) {
             throw new StorageException("File is empty. Please upload a file.");
@@ -59,3 +59,4 @@ public class FileController {
         return ResponseEntity.ok().body(res);
     }
 }
+ 

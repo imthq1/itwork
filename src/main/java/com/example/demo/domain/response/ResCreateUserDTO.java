@@ -14,11 +14,9 @@ import java.time.Instant;
 @Getter
 @Setter
 public class ResCreateUserDTO {
-<<<<<<< HEAD
-    private int id;
-=======
+
     private long id;
->>>>>>> master
+
     private String name;
     private String email;
     private int age;
@@ -31,11 +29,20 @@ public class ResCreateUserDTO {
 
     private Company company;
 
+    private  Role role;
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Company{
+        private long id;
+        private String name;
+    }
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Role{
         private long id;
         private String name;
     }

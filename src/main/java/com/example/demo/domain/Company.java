@@ -44,13 +44,11 @@ public class Company {
     @JsonIgnore
     List<User> users;
 
-<<<<<<< HEAD
-=======
+
     @OneToMany(mappedBy = "company",fetch = FetchType.LAZY)
     @JsonIgnore
     List<Job> jobs;
 
->>>>>>> master
     @PrePersist
     public void BeforeCreate(){
         this.createdBy= SecurityUtil.getCurrentUserLogin().isPresent()== true

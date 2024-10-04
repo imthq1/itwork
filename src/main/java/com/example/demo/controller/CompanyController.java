@@ -12,6 +12,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/v1")
 public class CompanyController {
@@ -46,5 +48,11 @@ public class CompanyController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/companies/{id}")
+    @ApiMessage("find company by id")
+    public ResponseEntity<Company> getCompanyById(@PathVariable long id) {
+        Optional<Company> company=Optional.ofNullable(this.companyService.findById(id));
 
+        return ResponseEntity.ok().body(company.get());
+    }
 }

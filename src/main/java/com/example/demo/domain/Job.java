@@ -36,8 +36,8 @@ public class Job {
     private Instant startDate;
     private Instant endDate;
     private boolean active;
-    private Instant createAt;
-    private Instant updateAt;
+    private Instant createdAt;
+    private Instant updatedAt;
     private String createdBy;
     private String updatedBy;
 
@@ -58,11 +58,11 @@ public class Job {
     @PrePersist
     public void handleBeforeCreate() {
         this.createdBy= SecurityUtil.getCurrentUserLogin().isPresent()?SecurityUtil.getCurrentUserLogin().get():null;
-        this.createAt= Instant.now();
+        this.createdAt= Instant.now();
     }
     @PreUpdate
     public void handleBeforeUpdate() {
-        this.updateAt= Instant.now();
+        this.updatedAt= Instant.now();
         this.updatedBy= SecurityUtil.getCurrentUserLogin().isPresent()?SecurityUtil.getCurrentUserLogin().get():null;
     }
 }
