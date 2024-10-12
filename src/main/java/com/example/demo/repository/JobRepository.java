@@ -1,6 +1,7 @@
 package com.example.demo.repository;
 
 import com.example.demo.domain.Job;
+import com.example.demo.domain.Skill;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -13,4 +14,5 @@ public interface JobRepository extends JpaRepository<Job, Long>, JpaSpecificatio
     Job deleteById(long id);
     Job findById(long id);
     List<Job> findAll();
+    List<Job> findBySkillsIn(List<Skill> skills);
 }

@@ -145,4 +145,12 @@ public class JobService {
 
         return updateJobDTO;
     }
+    public  List<Job> findAll()
+    {
+        return this.jobRepository.findAll();
+    }
+    public List<Job> findBySkillsIn(List<Skill> skills)
+    {
+        return this.jobRepository.findBySkillsIn(skills);
+    }
 }

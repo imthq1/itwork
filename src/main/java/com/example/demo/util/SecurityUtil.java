@@ -91,6 +91,25 @@ public class SecurityUtil {
         return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader,
                 claims)).getTokenValue();
     }
+    public String generateResetPasswordToken(String email, String resetCode, long expirationMillis) {
+        Instant now = Instant.now();
+        Instant validity = now.plusMillis(expirationMillis);  // Tạo thời gian hết hạn
+
+        // Tạo JWT ClaimsSet
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .issuedAt(now)  // Thời gian phát hành token
+                .expiresAt(validity)  // Thời gian hết hạn token
+                .subject(email)  // Thông tin người dùng (email)
+                .claim("resetCode", resetCode)  // Lưu mã khôi phục vào payload
+                .build();
+
+        // Tạo header
+        JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITH).build();
+
+        // Mã hóa JWT
+        return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
+    }
+
 
     private SecretKey getSecretKey() {
         byte[] keyBytes = Base64.from(jwtKey).decode();

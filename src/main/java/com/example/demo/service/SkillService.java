@@ -51,6 +51,8 @@ public class SkillService {
 
         currentSkill.getJobs().forEach(f->f.getSkills().remove(currentSkill));
         //delete Skill
+        currentSkill.getSubscribers().forEach(s->s.getSkills().remove(currentSkill));
+
         skillRepository.delete(skill.get());
     }
     public boolean existsById(long id) {

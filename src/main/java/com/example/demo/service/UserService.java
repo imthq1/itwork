@@ -165,5 +165,7 @@ public class UserService {
         return userDTO;
     }
 
-
+    public User findByEmail(String email) {
+        return this.userRepository.findByEmail(email);
+    }
 }

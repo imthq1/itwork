@@ -45,7 +45,7 @@ public class PermissionInerceptor implements HandlerInterceptor {
                             iteam -> iteam.getApiPath().equals(path)
                                     && iteam.getMethod().equals(httpMethod));
                     if (isAllow == false) {
-                        throw new PermissionException("Ban khong co quyen truy cap vao api nay!");
+                        throw new PermissionException("Ban khong co quyen truy cap vao api nay!"+currentUser.getName());
                     }
                 }
                 else {

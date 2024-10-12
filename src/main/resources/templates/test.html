@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cơ Hội Nghề Nghiệp Hấp Dẫn cho Lập Trình Viên</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        .highlight {
+            background-color: #f1c40f;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Cơ Hội Nghề Nghiệp Hấp Dẫn cho Lập Trình Viên</h1>
+
+    <p>Xin chào <span th:text="${name}"></span>,</p>
+
+    <p>Chúng tôi đang tìm kiếm những <span class="highlight">Lập Trình Viên Tài Năng</span> để tham gia vào đội ngũ phát triển của chúng tôi. Đây là cơ hội tuyệt vời để bạn phát triển kỹ năng và sự nghiệp trong một môi trường năng động và sáng tạo.</p>
+
+    <h2>Các Vị Trí Đang Tuyển:</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Vị Trí</th>
+            <th>Yêu Cầu</th>
+            <th>Mức Lương</th>
+            <th>Skills</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="job : ${value}">
+            <td th:text="${job.name}">Lập Trình Viên Full-stack</td>
+            <td th:text="${job.companyEmail.name}">JavaScript, React, Node.js, SQL, NoSQL</td>
+            <td> <span th:text="${#numbers.formatDecimal(job.salary, 0, 'COMMA', 0, 'POINT')}"></span> VND</td>
+            <td><span th:each="skill: ${job.skills} " th:text="${skill.getName()}"></span> </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h3>Chúng tôi cung cấp:</h3>
+    <ul>
+        <li>Mức lương cạnh tranh</li>
+        <li>Cơ hội học hỏi và phát triển</li>
+        <li>Môi trường làm việc linh hoạt</li>
+        <li>Các dự án đầy thách thức và hấp dẫn</li>
+    </ul>
+
+    <p>Nếu bạn quan tâm và muốn tham gia cùng chúng tôi, hãy gửi CV của bạn ngay hôm nay!</p>
+
+    <a href="#" class="cta-button">Ứng Tuyển Ngay</a>
+
+    <p>Trân trọng,<br>Đội ngũ Tuyển dụng</p>
+</div>
+</body>
+</html>

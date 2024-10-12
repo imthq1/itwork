@@ -91,7 +91,7 @@ return ResponseEntity.ok(this.resumeService.updateResume(reqResume));
         String email=SecurityUtil.getCurrentUserLogin().isPresent()==true
                 ?SecurityUtil.getCurrentUserLogin().get():"";
         User currentUser=this.userService.GetUserByUsername(email);
-        if(currentUser==null){
+        if(currentUser!=null){
             Company userCompany=currentUser.getCompany();
             if(userCompany!=null)
             {

@@ -50,16 +50,16 @@ public class SecurityConfiguration  {
         String[] whileList={
                 "/",
                 "/api/v1/auth/login","/api/v1/auth/refresh","/storage/**"
-                ,"/api/v1/auth/register"
+                ,"/api/v1/auth/register","/api/v1/email","/api/v1/forget/pass"
         };
         http.
                 csrf(c -> c.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers(whileList).permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/v1/companies").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/v1/jobs").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/v1/skills").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/companies/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/jobs/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/skills/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(f -> f.disable())
@@ -85,6 +85,7 @@ public class SecurityConfiguration  {
         byte[] keyBytes = Base64.from(jwtKey).decode();
         return new SecretKeySpec(keyBytes, 0, keyBytes.length, SecurityUtil.JWT_ALGORITH.getName());
     }
+
 
 
     @Bean
